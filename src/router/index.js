@@ -9,8 +9,8 @@ export default new Router({
   mode: 'history',
   routes: [
     {
-      path: '/login',
-      name: 'Login',
+      path: '/register',
+      name: 'Register',
       component: Register
     },
     {
