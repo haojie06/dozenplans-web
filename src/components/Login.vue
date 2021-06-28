@@ -1,36 +1,31 @@
 <template>
   <el-form class="login_container" label-position="left" label-width="0px">
-    <h3 class="login_title">用户注册</h3>
+    <h3 class="login_title">用户登录</h3>
     <el-form-item>
-      <el-input type="text" v-model="registerForm.username"
-                auto-complete="off" placeholder="用户名"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-input type="text" v-model="registerForm.email"
+      <el-input type="text" v-model="loginForm.email"
                 auto-complete="off" placeholder="邮箱"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-input type="password" v-model="registerForm.password"
+      <el-input type="password" v-model="loginForm.password"
                 auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
     <el-form-item style="width: 100%">
       <el-button type="primary" style="width: 100%;background: #66bb6a;border: none"
-                 @click="register">注册
+                 @click="login">登录
       </el-button>
     </el-form-item>
     <el-menu-item style="width: 50%">
-      <el-button type="text" @click="toLogin">已有账号？点击登录</el-button>
+      <el-button type="text" @click="toRegister">没有账号？点击注册</el-button>
     </el-menu-item>
   </el-form>
 </template>
 
 <script>
 export default {
-  name: 'Register',
+  name: 'Login',
   data () {
     return {
-      registerForm: {
-        username: '',
+      loginForm: {
         email: '',
         password: ''
       },
@@ -38,14 +33,11 @@ export default {
     }
   },
   methods: {
-    register () {
-      // todo 自己登录，所以只需要确定成功，然后跳转到登录界面
-      setTimeout(() => {
-        this.$router.replace({ path: '/login' })
-      }, 1500)
+    login () {
+      // todo 自己登录，获取token并存储
     },
-    toLogin () {
-      // todo 跳转到登录界面，让用户登录
+    toRegister () {
+      // todo 跳转到注册界面，让用户注册
     }
   }
 }
