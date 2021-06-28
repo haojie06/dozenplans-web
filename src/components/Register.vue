@@ -14,8 +14,8 @@
                 auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
     <el-form-item style="width: 100%">
-      <el-button type="primary" style="width: 100%;background: #505458;border: none"
-                 @click="register">登录
+      <el-button type="primary" style="width: 100%;background: #66bb6a;border: none"
+                 @click="register">注册
       </el-button>
     </el-form-item>
     <el-menu-item style="width: 50%">
@@ -39,15 +39,30 @@ export default {
   },
   methods: {
     register () {
-      // todo
+      // todo 自己登录，所以只需要确定成功，然后跳转到登录界面
     },
     changeLogin () {
-      // todo
+      // todo 跳转到登录界面，让用户登录
     }
   }
 }
 </script>
 
-<style scoped>
+<style>
+.login_container {
+  border-radius: 15px;
+  background-clip: padding-box;
+  margin: 90px auto;
+  width: 350px;
+  padding: 35px 35px 15px 35px;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 0 25px #cac6c6;
+}
 
+.login_title {
+  margin: 0 auto 40px auto;
+  text-align: center;
+  color: #505458;
+}
 </style>
