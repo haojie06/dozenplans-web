@@ -32,6 +32,8 @@ export default {
   },
   methods: {
     login () {
+      // 取 this 保持仅仅是此刻的this
+      let _this = this
       if (
         this.loginForm.email === '' ||
         this.loginForm.password === ''
@@ -57,8 +59,12 @@ export default {
             if (successResponse.data.result.Code === 200) {
               console.log('resp', successResponse.data.result.Data)
               alert('登录成功，将跳转界面')
+              _this.$store.commit('login', _this.loginForm)
+              let path = this.$route.query.redirect
+              // 从哪里来登录就跳回哪里，否则就跳转到主界面
               setTimeout(() => {
-                // todo to replace and add token to store
+                this.$router.replace({path: path === '/' || path === undefined
+                  ? '/index' : path})
               }, 1500)
             } else {
               this.$message.error('登录失败：' + successResponse.data.result)

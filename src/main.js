@@ -6,6 +6,7 @@ import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import qs from 'qs'
+import store from './store'
 
 // 反向代理
 let axios = require('axios')
@@ -17,9 +18,25 @@ Vue.config.productionTip = false
 
 Vue.use(ElementUI)
 /* eslint-disable no-new */
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth === true) {
+    if (store.state.user.username) {
+      next()
+    } else {
+      next({
+        path: 'login',
+        query: {redirect: to.fullPath}
+      })
+    }
+  } else {
+    next()
+  }
+})
+
 new Vue({
   el: '#app',
   router,
+  store,
   render: h => h(App),
   components: { App },
   template: '<App/>'
