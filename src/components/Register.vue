@@ -15,12 +15,10 @@
     </el-form-item>
     <el-form-item style="width: 100%">
       <el-button type="primary" style="width: 100%;background: #66bb6a;border: none"
-                 @click="register">注册
-      </el-button>
+                 @click="register">注册</el-button>
+      <el-button type="text" style="width: 50%;text-color: deepskyblue;border: none"
+                 @click="toLogin" class="text_button">已有账号？点击登录</el-button>
     </el-form-item>
-    <el-menu-item style="width: 50%">
-      <el-button type="text" @click="toLogin">已有账号？点击登录</el-button>
-    </el-menu-item>
   </el-form>
 </template>
 
@@ -74,13 +72,13 @@ export default {
             }
           })
           .catch(failResponse => {
-            console.log('registerError', failResponse.data)
-            this.$message.error('注册失败：' + failResponse)
+            console.log('registerError', failResponse.response.data)
+            this.$message.error('注册失败：' + JSON.stringify(failResponse.response.data))
           })
       }
     },
     toLogin () {
-      // todo 跳转到登录界面，让用户登录
+      this.$router.replace({ path: '/login' })
     }
   }
 }

@@ -11,12 +11,10 @@
     </el-form-item>
     <el-form-item style="width: 100%">
       <el-button type="primary" style="width: 100%;background: #66bb6a;border: none"
-                 @click="login">登录
-      </el-button>
+                 @click="login">登录</el-button>
+      <el-button type="text" style="width: 50%;text-color: deepskyblue;border: none"
+                 @click="toRegister">没有账号？点击注册</el-button>
     </el-form-item>
-    <el-menu-item style="width: 50%">
-      <el-button type="text" @click="toRegister">没有账号？点击注册</el-button>
-    </el-menu-item>
   </el-form>
 </template>
 
@@ -73,7 +71,7 @@ export default {
       }
     },
     toRegister () {
-      // todo 跳转到注册界面，让用户注册
+      this.$router.replace({ path: '/register' })
     }
   }
 }
