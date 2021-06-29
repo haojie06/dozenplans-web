@@ -5,12 +5,14 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import qs from 'qs'
 
 // 反向代理
 let axios = require('axios')
 axios.defaults.baseURL = 'http://localhost:8080/api'
-// 全局注册$axois
+// 全局注册
 Vue.prototype.$axios = axios
+Vue.prototype.$qs = qs
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)

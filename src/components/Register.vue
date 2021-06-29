@@ -39,10 +39,45 @@ export default {
   },
   methods: {
     register () {
-      // todo 自己登录，所以只需要确定成功，然后跳转到登录界面
-      setTimeout(() => {
-        this.$router.replace({ path: '/login' })
-      }, 1500)
+      if (
+        this.registerForm.username === '' ||
+        this.registerForm.email === '' ||
+        this.registerForm.password === ''
+      ) {
+        this.$message.error('信息不完整，无法注册')
+      } else {
+        let data = this.$qs.stringify({
+          'username': this.registerForm.username,
+          'email': this.registerForm.email,
+          'password': this.registerForm.password
+        })
+        let config = {
+          method: 'post',
+          url: '/users',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          data: data
+        }
+
+        this.$axios(config)
+          .then(successResponse => {
+            console.log(successResponse)
+            if (successResponse.data.result.Code === 200) {
+              console.log('resp', successResponse.data.result.Data)
+              alert('注册成功，将跳转到登录界面')
+              setTimeout(() => {
+                this.$router.replace({ path: '/login' })
+              }, 1500)
+            } else {
+              this.$message.error('注册失败：' + successResponse.data.result)
+            }
+          })
+          .catch(failResponse => {
+            console.log('registerError', failResponse.data)
+            this.$message.error('注册失败：' + failResponse)
+          })
+      }
     },
     toLogin () {
       // todo 跳转到登录界面，让用户登录

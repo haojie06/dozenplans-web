@@ -34,7 +34,43 @@ export default {
   },
   methods: {
     login () {
-      // todo 自己登录，获取token并存储
+      if (
+        this.loginForm.email === '' ||
+        this.loginForm.password === ''
+      ) {
+        this.$message.error('信息不完整，无法注册')
+      } else {
+        let data = this.$qs.stringify({
+          'email': this.loginForm.email,
+          'password': this.loginForm.password
+        })
+        let config = {
+          method: 'post',
+          url: '/login',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          },
+          data: data
+        }
+
+        this.$axios(config)
+          .then(successResponse => {
+            console.log(successResponse)
+            if (successResponse.data.result.Code === 200) {
+              console.log('resp', successResponse.data.result.Data)
+              alert('登录成功，将跳转界面')
+              setTimeout(() => {
+                // todo to replace and add token to store
+              }, 1500)
+            } else {
+              this.$message.error('登录失败：' + successResponse.data.result)
+            }
+          })
+          .catch(failResponse => {
+            console.log('loginError', failResponse.data)
+            this.$message.error('登录失败：' + failResponse)
+          })
+      }
     },
     toRegister () {
       // todo 跳转到注册界面，让用户注册
