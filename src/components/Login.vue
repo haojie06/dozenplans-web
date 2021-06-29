@@ -10,6 +10,7 @@
                 auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
     <el-form-item style="width: 100%">
+      <el-checkbox v-model="remember">记住登录信息</el-checkbox>
       <el-button type="primary" style="width: 100%;background: #66bb6a;border: none"
                  @click="login">登录</el-button>
       <el-button type="text" style="width: 50%;text-color: deepskyblue;border: none"
@@ -24,10 +25,12 @@ export default {
   data () {
     return {
       loginForm: {
+        username: '',
         email: '',
         password: ''
       },
-      responseResult: []
+      responseResult: [],
+      remember: false
     }
   },
   methods: {
@@ -58,10 +61,18 @@ export default {
             console.log(successResponse)
             if (successResponse.data.result.Code === 200) {
               console.log('resp', successResponse.data.result.Data)
-              alert('登录成功，将跳转界面')
+              this.$notify({
+                title: '登录成功',
+                message: '即将跳转界面',
+                duration: 5000
+              })
+              // todo to add username to loginForm
+              _this.loginForm.username = 'zxx'
+              // 存下 token 与 loginForm
+              _this.$store.commit('setToken', successResponse.data.result.Data)
               _this.$store.commit('login', _this.loginForm)
-              let path = this.$route.query.redirect
               // 从哪里来登录就跳回哪里，否则就跳转到主界面
+              let path = this.$route.query.redirect
               setTimeout(() => {
                 this.$router.replace({path: path === '/' || path === undefined
                   ? '/index' : path})

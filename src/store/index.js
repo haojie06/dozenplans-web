@@ -8,10 +8,9 @@ export default new Vuex.Store({
     user: {
       // 为什么此处使用【】而不仅仅判定是否有user这个key
       username: window.localStorage.getItem('user' || '[]') == null
-        ? '' : JSON.parse(window.localStorage.getItem('user' || '[]')).username,
-
-      token: ''
-    }
+        ? '' : JSON.parse(window.localStorage.getItem('user' || '[]')).username
+    },
+    token: ''
   },
   mutations: {
     login (state, user) {
@@ -21,6 +20,7 @@ export default new Vuex.Store({
 
     setToken (state, token) {
       state.token = token
+      window.localStorage.setItem('token', token)
     }
   }
 })
