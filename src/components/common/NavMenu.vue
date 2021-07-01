@@ -11,7 +11,9 @@
       {{ item.navItem }}
     </el-menu-item>
     <a href="#nowhere" style="color: #222;float: right;padding: 20px;">{{ username }}</a>
-    <i class="el-icon-menu" style="float:right;font-size: 45px;color: #222;padding-top: 8px"></i>
+    <el-button style="float:right;font-size: 16px;color: greenyellow;padding-top: 18px" @click="logout">
+      退出登录<i class="el-icon-remove-outline el-icon--right"></i>
+    </el-button>
     <span style="position: absolute;padding-top: 20px;right: 43%;font-size: 20px;font-weight: bold">
       DozenPlans</span>
   </el-menu>
@@ -26,6 +28,11 @@ export default {
         {name: '/chart', navItem: '统计报表'}
       ],
       username: this.$store.state.user.username
+    }
+  },
+  methods: {
+    logout () {
+      // todo
     }
   }
 }

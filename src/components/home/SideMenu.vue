@@ -2,8 +2,7 @@
   <el-menu
     default-active="1"
     class="el-menu-vertical"
-    @open="handleOpen"
-    @close="handleClose"
+    @select="handleSelect"
     active-text-color="#66bb6a">
     <el-menu-item index="1">
       <i class="el-icon-menu"></i>
@@ -14,8 +13,8 @@
         <i class="el-icon-files"></i>
         <span>科目分类</span>
       </template>
-      <el-menu-item v-for="(item,i) in categoryList" :key="i" :index="i + 1">
-        {{ item.CategoryName }}
+      <el-menu-item v-for="(item,i) in categoryList" :key="i" :index="item.Id + 3">
+        {{ item.CategoryName}}
       </el-menu-item>
     </el-submenu>
     <el-submenu index="3">
@@ -23,8 +22,9 @@
         <i class="el-icon-collection-tag"></i>
         <span>标签分类</span>
       </template>
-      <el-menu-item index="3-1">选项1</el-menu-item>
-      <el-menu-item index="3-2">选项2</el-menu-item>
+      <el-menu-item v-for="(item,i) in tagList" :key="i" :index="item.Id + 3 + categoryList.length">
+        {{ item.TagName}}
+      </el-menu-item>
     </el-submenu>
   </el-menu>
 </template>
@@ -35,8 +35,8 @@ export default {
   data () {
     return {
       tagList: [],
-      categoryList: [
-      ]
+      categoryList: [],
+      cid: ''
     }
   },
   mounted () {
@@ -58,13 +58,6 @@ export default {
         if (resp.status === 200 && resp.data.result.Code === 200) {
           // todo to add
           this.categoryList = resp.data.result.Data
-          // let list = resp.data.result.Data
-          // for (let l in list) {
-          //   for (let category in this.categoryList) {
-          //     if (category.Name !== l.CategoryName) {
-          //     }
-          //   }
-          // }
         }
       }).catch(error => {
         console.log('categoryError', error)
@@ -88,6 +81,23 @@ export default {
       }).catch(error => {
         console.log('tagError', error)
       })
+    },
+    handleSelect (key, keyPath) {
+      if (key === 2 && key === 3) {
+        // 此时不应跳转
+        this.cid = -1
+        return
+      } else if (key === 1) {
+        // 当index为1时，我们选择all
+        this.cid = 0
+      } else if (key > 3 + this.categoryList.length) {
+        // 此时以tag呈现list
+        this.cid = key - 3 - this.categoryList.length
+      } else {
+        // 此时为category
+        this.cid = key - 3
+      }
+      this.$emit('indexSelect')
     }
   }
 }

@@ -20,11 +20,14 @@
 </template>
 
 <script>
+import {parseUtils} from '../utils/utils'
+
 export default {
   name: 'Login',
   data () {
     return {
       loginForm: {
+        id: '',
         username: '',
         email: '',
         password: ''
@@ -67,9 +70,13 @@ export default {
                 duration: 5000
               })
               // todo to add username to loginForm
-              _this.loginForm.username = 'zxx'
               // 存下 token 与 loginForm
-              _this.$store.commit('setToken', successResponse.data.result.Data)
+              let token = successResponse.data.result.Data
+              let user = parseUtils.parseToken(token)
+              console.log('token', user)
+              _this.loginForm.username = user.aud
+              _this.loginForm.id = user.jti
+              _this.$store.commit('setToken', token)
               _this.$store.commit('login', _this.loginForm)
               // 从哪里来登录就跳回哪里，否则就跳转到主界面
               let path = this.$route.query.redirect
