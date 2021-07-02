@@ -13,7 +13,7 @@
         <i class="el-icon-files"></i>
         <span>科目分类</span>
       </template>
-      <el-menu-item v-for="(item,i) in categoryList" :key="i" :index="item.Id + 3">
+      <el-menu-item v-for="(item,i) in categoryList" :key="i" :index=getIndexFromTag(item.Id)>
         {{ item.CategoryName}}
       </el-menu-item>
     </el-submenu>
@@ -22,7 +22,7 @@
         <i class="el-icon-collection-tag"></i>
         <span>标签分类</span>
       </template>
-      <el-menu-item v-for="(item,i) in tagList" :key="i" :index="item.Id + 3 + categoryList.length">
+      <el-menu-item v-for="(item,i) in tagList" :key="i" :index=getIndexFromCategory(item.Id)>
         {{ item.TagName}}
       </el-menu-item>
     </el-submenu>
@@ -36,7 +36,8 @@ export default {
     return {
       tagList: [],
       categoryList: [],
-      cid: ''
+      id: '',
+      listType: 'all'
     }
   },
   mounted () {
@@ -82,22 +83,24 @@ export default {
         console.log('tagError', error)
       })
     },
-    handleSelect (key, keyPath) {
-      if (key === 2 && key === 3) {
-        // 此时不应跳转
-        this.cid = -1
-        return
-      } else if (key === 1) {
-        // 当index为1时，我们选择all
-        this.cid = 0
-      } else if (key > 3 + this.categoryList.length) {
-        // 此时以tag呈现list
-        this.cid = key - 3 - this.categoryList.length
+    handleSelect (index, indexPath) {
+      console.log('indexSelect:', index)
+      if (index.substr(0, 3) === 'tag' ||
+        index.substr(0, 3) === 'cat') {
+        this.id = index.substr(4)
+        this.listType = index.substr(0, 3)
+      } else if (index === 1) {
+        this.listType = 'all'
       } else {
-        // 此时为category
-        this.cid = key - 3
+        return
       }
       this.$emit('indexSelect')
+    },
+    getIndexFromTag (id) {
+      return 'tag' + id.toString()
+    },
+    getIndexFromCategory (id) {
+      return 'cat' + id.toString()
     }
   }
 }

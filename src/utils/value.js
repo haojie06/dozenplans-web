@@ -1,5 +1,7 @@
 let globalValue = {
-  all: 'all'
+  all: 'all',
+  category: 'category',
+  tag: 'tag'
 }
 
 export {globalValue}

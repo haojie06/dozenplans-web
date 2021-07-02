@@ -11,9 +11,11 @@
       {{ item.navItem }}
     </el-menu-item>
     <a href="#nowhere" style="color: #222;float: right;padding: 20px;">{{ username }}</a>
-    <el-button style="float:right;font-size: 16px;color: greenyellow;padding-top: 18px" @click="logout">
-      退出登录<i class="el-icon-remove-outline el-icon--right"></i>
-    </el-button>
+    <el-popconfirm title="确定退出登录吗？">
+      <el-button style="float:right;font-size: 16px;color: greenyellow;padding-top: 18px" @click="logout">
+        退出登录<i class="el-icon-remove-outline el-icon--right"></i>
+      </el-button>
+    </el-popconfirm>
     <span style="position: absolute;padding-top: 20px;right: 43%;font-size: 20px;font-weight: bold">
       DozenPlans</span>
   </el-menu>
