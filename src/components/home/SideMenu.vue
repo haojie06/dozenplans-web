@@ -13,7 +13,7 @@
         <i class="el-icon-files"></i>
         <span>科目分类</span>
       </template>
-      <el-menu-item v-for="(item,i) in categoryList" :key="i" :index=getIndexFromTag(item.Id)>
+      <el-menu-item v-for="(item,i) in categoryList" :key="i" :index=getIndexFromCategory(item.Id)>
         {{ item.CategoryName}}
       </el-menu-item>
     </el-submenu>
@@ -22,7 +22,7 @@
         <i class="el-icon-collection-tag"></i>
         <span>标签分类</span>
       </template>
-      <el-menu-item v-for="(item,i) in tagList" :key="i" :index=getIndexFromCategory(item.Id)>
+      <el-menu-item v-for="(item,i) in tagList" :key="i" :index=getIndexFromTag(item.Id)>
         {{ item.TagName}}
       </el-menu-item>
     </el-submenu>
@@ -87,9 +87,9 @@ export default {
       console.log('indexSelect:', index)
       if (index.substr(0, 3) === 'tag' ||
         index.substr(0, 3) === 'cat') {
-        this.id = index.substr(4)
+        this.id = index.substr(3)
         this.listType = index.substr(0, 3)
-      } else if (index === 1) {
+      } else if (index === 1 || index === '1') {
         this.listType = 'all'
       } else {
         return

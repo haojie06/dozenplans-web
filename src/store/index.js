@@ -10,7 +10,8 @@ export default new Vuex.Store({
       username: window.localStorage.getItem('user' || '[]') == null
         ? '' : JSON.parse(window.localStorage.getItem('user' || '[]')).username
     },
-    token: null
+    token: null,
+    showList: []
   },
   mutations: {
     login (state, user) {
@@ -25,6 +26,11 @@ export default new Vuex.Store({
     logout (state) {
       state.user = null
       state.token = null
+      window.localStorage.removeItem('user')
+      window.localStorage.removeItem('token')
+    },
+    setShowList (state, list) {
+      state.showList = list
     }
   }
   // getters: {

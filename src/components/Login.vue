@@ -13,7 +13,7 @@
       <el-checkbox v-model="remember">记住登录信息</el-checkbox>
       <el-button type="primary" style="width: 100%;background: #66bb6a;border: none"
                  @click="login">登录</el-button>
-      <el-button type="text" style="width: 50%;text-color: deepskyblue;border: none"
+      <el-button type="text" style="width: 50%;color: blue;border: none"
                  @click="toRegister">没有账号？点击注册</el-button>
     </el-form-item>
   </el-form>
