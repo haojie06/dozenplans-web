@@ -5,8 +5,8 @@
       <SideMenu @indexSelect="listByID" ref="sideMenu"></SideMenu>
     </el-aside>
     <el-main>
-      <el-button class="edit-button" type="info" icon="el-icon-edit" circle></el-button>
-      <TaskList v-bind:list="list" :isLoading="isLoading" class="list-area" ref="listArea"></TaskList>
+      <el-button class="edit-button" type="info" icon="el-icon-edit" circle @click="newEdit"></el-button>
+      <TaskList @refreshList="listByID" v-bind:list="list" :isLoading="isLoading" class="list-area" ref="listArea"></TaskList>
     </el-main>
   </el-container>
 </template>
@@ -62,6 +62,9 @@ export default {
       }).catch(error => {
         console.log(error)
       })
+    },
+    newEdit () {
+      // to create a dialog
     }
   }
 }
