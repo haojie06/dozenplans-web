@@ -102,13 +102,19 @@ export default {
 </script>
 
 <style>
+body {
+  background: url(../assets/LoginBackgroundImg.jpg);
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+}
 .login_container {
   border-radius: 15px;
   background-clip: padding-box;
   margin: 90px auto;
   width: 350px;
   padding: 35px 35px 15px 35px;
-  background: #fff;
+  background:rgb(19, 18, 18);
+  opacity: 0.5;
   border: 1px solid #eaeaea;
   box-shadow: 0 0 25px #cac6c6;
 }
