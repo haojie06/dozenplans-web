@@ -10,9 +10,10 @@
     <el-menu-item v-for="(item,i) in navList" :key="i" :index="item.name">
       {{ item.navItem }}
     </el-menu-item>
-    <a href="#nowhere" style="color: #222;float: right;padding: 20px;">{{ username }}</a>
+    <a href="#nowhere" style="color: #222;float: right;padding: 20px">{{ username }}</a>
     <el-popconfirm title="确定退出登录吗？">
-      <el-button style="float:right;font-size: 16px;color: greenyellow;padding-top: 18px" @click="logout">
+      <el-button style="float:right;font-size: 16px;color: greenyellow;
+      padding-top: 18px" @click="logout">
         退出登录<i class="el-icon-remove-outline el-icon--right"></i>
       </el-button>
     </el-popconfirm>

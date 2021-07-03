@@ -5,7 +5,7 @@
       <SideMenu @indexSelect="listByID" ref="sideMenu"></SideMenu>
     </el-aside>
     <el-main>
-      <TaskList class="list-area" ref="listArea"></TaskList>
+      <TaskList v-bind:list="list" class="list-area" ref="listArea"></TaskList>
     </el-main>
   </el-container>
 </template>
@@ -17,11 +17,21 @@ import TaskList from './TaskList'
 export default {
   name: 'AppIndex',
   components: {SideMenu, TaskList},
+  data () {
+    return {
+      list: []
+    }
+  },
+  mounted () {
+    this.listByID('all')
+  },
   methods: {
-    listByID () {
+    listByID (type) {
       let _this = this
       let id = this.$refs.sideMenu.id
-      let type = this.$refs.sideMenu.listType
+      if (type === undefined) {
+        type = this.$refs.sideMenu.listType
+      }
       let url
       if (type === 'tag') {
         url = '/tags/' + id
@@ -39,8 +49,9 @@ export default {
       }
       this.$axios(config).then(resp => {
         if (resp.data.result.Code === 200) {
-          _this.$refs.listArea.taskList = resp.data.result
-          // _this.$store.commit('setShowList', resp.data.result)
+          // _this.$refs.listArea.taskList = resp.data.result.Data
+          // _this.$store.commit('setShowList', resp.data.result.Data)
+          _this.list = resp.data.result.Data
           console.log('listById', resp.data)
           console.log('curList', _this.$refs.listArea.taskList)
         }

@@ -1,16 +1,20 @@
 <template>
   <div style="margin-left:1%;margin-right:1%">
     <el-row>
-      <el-col :span="4" v-for="(item, i) in taskList" :key=i :offset="1">
+      <el-col :span="4" v-for="(item, i) in list" :key=i :offset="1">
         <div style="margin-top:15px">
-          <el-card :body-style="{ padding: '0px', color: getColorByPri(item.Priority)}" shadow="hover">
+          <el-card :body-style="{ padding: '0px', color: getColorByPri(item.Priority)}"
+                   shadow="hover" @click.native="edit(item)">
             <!--   to add content         -->
             <div>
-              <span>{{ item.TaskName }}</span><br>
+              <strong>{{ item.TaskName }}</strong><br>
               <div class="other-info">
-                <time class="time"><strong>结束时间:</strong>{{ getTextTime(item.DeadlineAt) }}</time>
-                <el-popconfirm title="确定结束任务吗？">
-                  <el-button type="text" class="button" @click="add(item)">结束</el-button>
+                <time class="time"><span>结束时间:</span>{{ getTextTime(item.DeadlineAt) }}</time>
+                <el-popconfirm title="确定结束任务？" @onConfirm="finish(item)">
+                  <el-button slot="reference" type="text" class="button"
+                             :disabled="item.Status === 'done' || item.Status === 'failed'">
+                    {{ getStatus(item) }}
+                  </el-button>
                 </el-popconfirm>
               </div>
             </div>
@@ -26,18 +30,19 @@ import {parseUtils} from '../../utils/utils'
 
 export default {
   name: 'TaskList',
+  props: ['list'],
   data () {
     return {
       taskList: [],
       colorPriority: ['#4caf50', '#1e88e5', '#f9a825', '#f44336']
     }
   },
-  watch: {
-    'this.$store.state.showList' () {
-      console.log('storeList', this.$store.state.showList)
-      this.taskList = this.$store.state.showList
-    }
-  },
+  // watch: {
+  //   'this.$store.state.showList' () {
+  //     console.log('storeList', this.$store.state.showList)
+  //     this.taskList = this.$store.state.showList
+  //   }
+  // },
   methods: {
     getColorByPri (priority) {
       return this.colorPriority[priority]
@@ -64,12 +69,28 @@ export default {
       }).catch(error => {
         console.log(error)
       })
+    },
+    finish (item) {
+      if (item.Status === 'undone') {
+        item.Status = 'done'
+        // todo to change in post
+      }
+    },
+    edit (item) {
+      // todo
+    },
+    getStatus (item) {
+      let buttonTip
+      if (item.Status === 'done') {
+        buttonTip = '已完成'
+      } else if (item.Status === 'undone') {
+        buttonTip = '结束'
+      } else if (item.Status === 'failed') {
+        buttonTip = '失败任务'
+      }
+      return buttonTip
     }
-  },
-  mounted () {
-    this.loadList()
   }
-
 }
 </script>
 
