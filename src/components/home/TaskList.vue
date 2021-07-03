@@ -1,5 +1,6 @@
 <template>
   <div style="margin-left:1%;margin-right:1%">
+<!--    <el-skeleton :rows="6" animated :loading="isLoading"/>-->
     <el-row>
       <el-col :span="4" v-for="(item, i) in list" :key=i :offset="1">
         <div style="margin-top:15px">
@@ -30,11 +31,11 @@ import {parseUtils} from '../../utils/utils'
 
 export default {
   name: 'TaskList',
-  props: ['list'],
+  props: ['list', 'isLoading'],
   data () {
     return {
       taskList: [],
-      colorPriority: ['#4caf50', '#1e88e5', '#f9a825', '#f44336']
+      colorPriority: ['#4caf50', '#1e88e5', '#f9a825', '#f44336'],
     }
   },
   // watch: {

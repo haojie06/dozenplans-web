@@ -5,7 +5,8 @@
       <SideMenu @indexSelect="listByID" ref="sideMenu"></SideMenu>
     </el-aside>
     <el-main>
-      <TaskList v-bind:list="list" class="list-area" ref="listArea"></TaskList>
+      <el-button class="edit-button" type="info" icon="el-icon-edit" circle></el-button>
+      <TaskList v-bind:list="list" :isLoading="isLoading" class="list-area" ref="listArea"></TaskList>
     </el-main>
   </el-container>
 </template>
@@ -19,7 +20,8 @@ export default {
   components: {SideMenu, TaskList},
   data () {
     return {
-      list: []
+      list: [],
+      isLoading: true
     }
   },
   mounted () {
@@ -27,6 +29,7 @@ export default {
   },
   methods: {
     listByID (type) {
+      this.isLoading = true
       let _this = this
       let id = this.$refs.sideMenu.id
       if (type === undefined) {
@@ -54,6 +57,7 @@ export default {
           _this.list = resp.data.result.Data
           console.log('listById', resp.data)
           console.log('curList', _this.$refs.listArea.taskList)
+          _this.isLoading = false
         }
       }).catch(error => {
         console.log(error)
