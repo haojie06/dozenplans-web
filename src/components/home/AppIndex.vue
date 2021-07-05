@@ -6,9 +6,9 @@
     </el-aside>
     <el-main>
       <div class="edit-button" align="center" style="position:fixed;right:200px;bottom:100px">
-      <el-button type="info" icon="el-icon-edit " circle></el-button>
+      <el-button class="edit-button" type="info" icon="el-icon-edit"  circle @click="newEdit"></el-button>
       </div>
-      <TaskList v-bind:list="list" :isLoading="isLoading" class="list-area" ref="listArea"></TaskList>
+      <TaskList @refreshList="listByID" v-bind:list="list" :isLoading="isLoading" class="list-area" ref="listArea"></TaskList>
     </el-main>
   </el-container>
 </template>
@@ -64,6 +64,9 @@ export default {
       }).catch(error => {
         console.log(error)
       })
+    },
+    newEdit () {
+      // to create a dialog
     }
   }
 }
