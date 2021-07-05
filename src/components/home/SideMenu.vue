@@ -59,6 +59,7 @@ export default {
         if (resp.status === 200 && resp.data.result.Code === 200) {
           // todo to add
           this.categoryList = resp.data.result.Data
+          this.$emit('emitCate', this.categoryList)
         }
       }).catch(error => {
         console.log('categoryError', error)
@@ -78,6 +79,7 @@ export default {
         // todo to add new
         if (resp.status === 200 && resp.data.result.Code === 200) {
           this.tagList = resp.data.result.Data
+          this.$emit('emitTag', this.tagList)
         }
       }).catch(error => {
         console.log('tagError', error)

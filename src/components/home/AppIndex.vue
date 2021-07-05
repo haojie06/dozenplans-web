@@ -2,11 +2,13 @@
   <el-container>
     <el-aside style="width: 200px;margin-top: 20px">
       <switch></switch>
-      <SideMenu @indexSelect="listByID" ref="sideMenu"></SideMenu>
+      <SideMenu @indexSelect="listByID" @emitCate="getCate" @emitTag="getTag" ref="sideMenu"></SideMenu>
     </el-aside>
     <el-main>
       <el-button class="edit-button" type="info" icon="el-icon-edit" circle @click="newEdit"></el-button>
-      <TaskList @refreshList="listByID" v-bind:list="list" :isLoading="isLoading" class="list-area" ref="listArea"></TaskList>
+      <TaskList @refreshList="listByID" v-bind:list="list" :isLoading="isLoading"
+                :category-list="categoryList" :tag-list="tagList" @editFinish="refresh"
+                class="list-area" ref="listArea"></TaskList>
     </el-main>
   </el-container>
 </template>
@@ -21,7 +23,9 @@ export default {
   data () {
     return {
       list: [],
-      isLoading: true
+      isLoading: true,
+      categoryList: [],
+      tagList: []
     }
   },
   mounted () {
@@ -65,6 +69,27 @@ export default {
     },
     newEdit () {
       // to create a dialog
+    },
+    refresh () {
+      this.listByID()
+      this.$refs.sideMenu.loadCategories()
+      this.$refs.sideMenu.loadTags()
+    },
+    getCate (categories) {
+      this.categoryList.slice(0, this.categoryList.length)
+      // console.log('cate', categories)
+      for (let categoriesKey of categories) {
+        // console.log('cateTest', categoriesKey.CategoryName)
+        this.categoryList.push(categoriesKey.CategoryName)
+      }
+      // console.log('cates:', this.categoryList)
+    },
+    getTag (tags) {
+      this.tagList.slice(0, this.tagList.length)
+      for (let tagsKey of tags) {
+        this.tagList.push(tagsKey.TagName)
+      }
+      console.log('tags:', this.tagList)
     }
   }
 }

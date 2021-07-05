@@ -1,12 +1,12 @@
 <template>
   <div style="margin-left:1%;margin-right:1%">
-<!--    <el-skeleton :rows="6" animated :loading="isLoading"/>-->
+    <!--    <el-skeleton :rows="6" animated :loading="isLoading"/>-->
     <el-row>
       <el-col :span="4" v-for="(item, i) in list" :key=i :offset="1">
         <div style="margin-top:15px">
           <el-card :body-style="{ padding: '0px', color: getColorByPri(item.Priority)}"
                    shadow="hover" @click.native="edit(item)">
-            <!--   to add content         -->
+            <span>{{ item.Content }}</span>
             <div>
               <strong>{{ item.TaskName }}</strong><br>
               <div class="other-info">
@@ -24,20 +24,52 @@
       </el-col>
     </el-row>
     <el-dialog title="编辑任务" :visible.sync="dialogFormVisible" append-to-body>
-      <el-form :model="this.curItem">
+      <el-form :model="curItem" label-width="100px" size="small" label-position="right">
         <el-form-item label="任务名称" label-width="120px">
-          <el-input v-model="this.curItem.TaskName" autocomplete="off"></el-input>
+          <el-input v-model="curItem.TaskName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="任务内容" label-width="120px">
-          <el-select v-model="this.curItem.Category" placeholder="请选择活动区域">
-            <el-option label="区域一" value="shanghai"></el-option>
-            <el-option label="区域二" value="beijing"></el-option>
+        <el-form-item label="任务内容">
+          <el-input type="textarea" v-model="curItem.Content"></el-input>
+        </el-form-item>
+        <el-form-item label="任务分类" label-width="120px">
+          <el-select v-model="curItem.Category" placeholder="请选择分类" filterable allow-create default-first-option>
+            <el-option v-for="(category, i) in categoryList" :key="i"
+                       :label="category" :value="category"></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="任务标签" label-width="120px">
+          <el-select v-model="tagsForm" placeholder="请选择标签" filterable allow-create multiple default-first-option>
+            <el-option v-for="(tag, i) in tagList" :key="i"
+                       :label="tag" :value="tag"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="优先级" label-width="120px">
+          <el-radio-group v-model="curItem.Priority" fill="#4caf50">
+            <el-radio :label="0">不重要</el-radio>
+            <el-radio :label="1">一般</el-radio>
+            <el-radio :label="2">重要</el-radio>
+            <el-radio :label="3">很重要</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="结束时间" label-width="120px">
+          <el-date-picker
+            v-model="curItem.DeadlineAt"
+            type="datetime"
+            placeholder="选择日期时间"
+            default-time="12:00:00">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="是否为周期任务" label-width="120px">
+          <el-switch
+            v-model="curItem.IsCycle"
+            active-color="#13ce66"
+            inactive-color="#ff4949">
+          </el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+        <el-button type="primary" @click="confirmEdit">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -48,7 +80,7 @@ import {parseUtils} from '../../utils/utils'
 
 export default {
   name: 'TaskList',
-  props: ['list', 'isLoading'],
+  props: ['list', 'isLoading', 'categoryList', 'tagList'],
   data () {
     return {
       taskList: [],
@@ -74,6 +106,7 @@ export default {
         'Tags': '',
         'Category': ''
       },
+      tagsForm: [],
       dialogFormVisible: false
     }
   },
@@ -113,6 +146,7 @@ export default {
     finish (item) {
       if (item.Status === 'undone') {
         item.Status = 'done'
+        item.FinishedAt = parseUtils.getCurRFC()
         let config = {
           method: 'put',
           url: '/tasks/' + item.Id,
@@ -142,11 +176,18 @@ export default {
     },
     // about edit
     edit (item) {
-      this.curItem = item
-      // todo
+      if (item !== null) {
+        this.curItem = item
+        this.tagsForm = parseUtils.splitTags(this.curItem.Tags)
+        console.log('splitResult', this.tagsForm)
+      }
+      console.log('curItem:', this.curItem)
+      this.dialogFormVisible = true
+      // after edit:this.$emit('indexSelect')
     },
     confirmEdit () {
       // todo
+      this.dialogFormVisible = false
     },
     getStatus (item) {
       let buttonTip

@@ -19,6 +19,9 @@ let parseUtils = {
     let ss = new Date().getSeconds() < 10 ? '0' + new Date().getSeconds() : new Date().getSeconds()
     let endDate = y + '-' + m + '-' + d + ' ' + hh + ':' + mm + ':' + ss
     return endDate.replace(/\s+/g, 'T') + '+08:00'
+  },
+  splitTags (tags) {
+    return tags.trim().split(/\s+/)
   }
 }
 
