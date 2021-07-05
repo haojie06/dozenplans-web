@@ -5,7 +5,9 @@
       <SideMenu @indexSelect="listByID" ref="sideMenu"></SideMenu>
     </el-aside>
     <el-main>
-      <el-button class="edit-button" type="info" icon="el-icon-edit" circle></el-button>
+      <div class="edit-button" align="center" style="position:fixed;right:200px;bottom:100px">
+      <el-button type="info" icon="el-icon-edit " circle></el-button>
+      </div>
       <TaskList v-bind:list="list" :isLoading="isLoading" class="list-area" ref="listArea"></TaskList>
     </el-main>
   </el-container>
@@ -68,5 +70,9 @@ export default {
 </script>
 
 <style scoped>
-
+/* .edit-button{
+  margin-top: -100px;
+  position:relative;
+  top:300;
+} */
 </style>

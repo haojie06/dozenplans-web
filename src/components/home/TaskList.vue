@@ -35,7 +35,7 @@ export default {
   data () {
     return {
       taskList: [],
-      colorPriority: ['#4caf50', '#1e88e5', '#f9a825', '#f44336'],
+      colorPriority: ['#4caf50', '#1e88e5', '#f9a825', '#f44336']
     }
   },
   // watch: {
