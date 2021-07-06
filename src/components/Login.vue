@@ -103,7 +103,7 @@ export default {
 
 <style>
 body {
-  background: url(../assets/LoginBackgroundImg.jpg);
+  background: url(../assets/LoginBackgroundImg1.png);
   background-repeat: no-repeat;
   background-size: 100% auto;
 }
@@ -114,7 +114,7 @@ body {
   width: 350px;
   padding: 35px 35px 15px 35px;
   background:rgb(19, 18, 18);
-  opacity: 0.5;
+  opacity: 0.8;
   border: 1px solid #eaeaea;
   box-shadow: 0 0 25px #cac6c6;
 }
