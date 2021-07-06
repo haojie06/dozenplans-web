@@ -70,7 +70,7 @@ export default {
       })
     },
     newEdit () {
-      // to create a dialog
+      this.$refs.listArea.edit()
     },
     refresh () {
       this.listByID()

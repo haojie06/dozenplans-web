@@ -97,7 +97,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="cancelEdit">取 消</el-button>
         <el-button type="primary" @click="confirmEdit">确 定</el-button>
       </div>
     </el-dialog>
@@ -115,6 +115,19 @@ export default {
       taskList: [],
       colorPriority: ['#4caf50', '#1e88e5', '#f9a825', '#f44336'],
       curItem: {
+        'TaskName': '',
+        'Content': '',
+        'Priority': 0,
+        'DeadlineAt': '',
+        'Status': 'done',
+        'IsCycle': false,
+        'NotifyMode': 'none',
+        'NotifyTime': '2021-07-01T10:12:12-04:00',
+        'NotifyInterval': 0,
+        'Tags': '',
+        'Category': ''
+      },
+      defaultItem: {
         'TaskName': '',
         'Content': '',
         'Priority': 0,
@@ -172,7 +185,7 @@ export default {
     finish (item) {
       if (item.Status === 'undone') {
         item.Status = 'done'
-        item.FinishedAt = parseUtils.getCurRFC()
+        item.FinishedAt = parseUtils.getRFCTime()
         let config = {
           method: 'put',
           url: '/tasks/' + item.Id,
@@ -202,17 +215,71 @@ export default {
     },
     // about edit
     edit (item) {
+      // 仅仅copy给curItem，这样方便以后清空表格
       if (item !== null) {
-        this.curItem = item
+        Object.assign(this.curItem, item)
+      } else {
+        for (let itemKey in item) {
+          delete item[itemKey]
+        }
+        Object.assign(this.curItem, this.defaultItem)
       }
       // console.log('splitResult', this.tagsForm)
       this.tagsForm = parseUtils.splitTags(this.curItem.Tags)
       parseUtils.setIntervalTime(this.curItem.NotifyInterval, this.time)
       console.log('curItem:', this.curItem)
       this.dialogFormVisible = true
-      // after edit:this.$emit('indexSelect')
     },
     confirmEdit () {
+      // transform tags and intervalTime
+      this.curItem.NotifyInterval = parseUtils.getIntervalSecond(this.time)
+      this.curItem.Tags = parseUtils.mergeTags(this.tagsForm)
+      console.log('timeType:', typeof this.curItem.DeadlineAt)
+      if ((typeof this.curItem.DeadlineAt) !== 'string') {
+        this.curItem.DeadlineAt = parseUtils.getRFCTime(this.curItem.DeadlineAt)
+      }
+      console.log('itemAfterEdit', this.curItem)
+      console.log('Deadline:', this.curItem.DeadlineAt)
+      let method = ''
+      let url
+      if (this.curItem.Id === null || this.curItem.Id === undefined) {
+        method = 'post'
+        url = '/tasks'
+      } else {
+        method = 'put'
+        url = '/tasks/' + this.curItem.Id
+      }
+      let config = {
+        method: method,
+        url: url,
+        headers: {
+          'Authorization': this.$store.state.token,
+          'Content-Type': 'application/json'
+        },
+        data: JSON.stringify(this.curItem)
+      }
+      let _this = this
+      this.$axios(config).then(resp => {
+        console.log('editResult', resp.data)
+        if (resp && resp.data.result.Code === 200) {
+          _this.$notify({
+            title: '成功',
+            message: '提交成功',
+            type: 'success'
+          })
+          _this.$emit('editFinish')
+        }
+      }).catch(error => {
+        console.log(error)
+        _this.$notify({
+          title: '失败',
+          message: '提交失败',
+          type: 'warning'
+        })
+      })
+      this.dialogFormVisible = false
+    },
+    cancelEdit () {
       // todo
       this.dialogFormVisible = false
     },
