@@ -22,6 +22,16 @@ let parseUtils = {
   },
   splitTags (tags) {
     return tags.trim().split(/\s+/)
+  },
+  setIntervalTime (interval, time) {
+    let m = interval / 60
+    let h = m / 60
+    let min = m % 60
+    let hour = h % 24
+    let day = h / 24
+    time.min = min
+    time.hour = hour
+    time.day = day
   }
 }
 

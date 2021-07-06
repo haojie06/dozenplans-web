@@ -65,6 +65,35 @@
             active-color="#13ce66"
             inactive-color="#ff4949">
           </el-switch>
+          <span style="margin-left: 20px;margin-right: 10px">提醒模式</span>
+          <el-radio-group v-model="curItem.NotifyMode" fill="#4caf50">
+            <el-radio label="none">不提醒</el-radio>
+            <el-radio label="timing">定时提醒</el-radio>
+            <el-radio label="interval">间隔提醒</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <!--        开始不能大于结束的时间-->
+        <el-form-item label="提醒开始时间" label-width="120px">
+          <el-date-picker
+            v-model="curItem.NotifyTime"
+            type="datetime"
+            :disabled="isNotify(curItem.NotifyMode)"
+            placeholder="选择日期时间"
+            default-time="12:00:00">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="提醒时间间隔" label-width="120px">
+          <template>
+            <el-input-number v-model="time.day" :disabled="curItem.NotifyMode !=='interval'"
+                             :precision="0" :step="1" :min="0" :max="60"></el-input-number>
+            <span style="margin-left: 5px;margin-right: 10px">日</span>
+            <el-input-number v-model="time.hour" :disabled="curItem.NotifyMode !=='interval'"
+                             :precision="0" :step="1" :min="0" :max="24"></el-input-number>
+            <span style="margin-left: 5px;margin-right: 10px">时</span>
+            <el-input-number v-model="time.min" :disabled="curItem.NotifyMode !=='interval'"
+                             :precision="0" :step="1" :min="0" :max="60"></el-input-number>
+            <span style="margin-left: 5px">分</span>
+          </template>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -86,27 +115,24 @@ export default {
       taskList: [],
       colorPriority: ['#4caf50', '#1e88e5', '#f9a825', '#f44336'],
       curItem: {
-        'Id': 0,
-        'UserId': 0,
         'TaskName': '',
         'Content': '',
         'Priority': 0,
-        'CreatedAt': '',
-        'UpdatedAt': '',
-        'FinishedAt': '',
         'DeadlineAt': '',
         'Status': 'done',
         'IsCycle': false,
-        'CompleteCount': 0,
         'NotifyMode': 'none',
         'NotifyTime': '2021-07-01T10:12:12-04:00',
-        'Notified': false,
-        'MailSend': false,
-        'NotifyInterval': 50,
+        'NotifyInterval': 0,
         'Tags': '',
         'Category': ''
       },
       tagsForm: [],
+      time: {
+        hour: 0,
+        min: 0,
+        day: 0
+      },
       dialogFormVisible: false
     }
   },
@@ -178,9 +204,10 @@ export default {
     edit (item) {
       if (item !== null) {
         this.curItem = item
-        this.tagsForm = parseUtils.splitTags(this.curItem.Tags)
-        console.log('splitResult', this.tagsForm)
       }
+      // console.log('splitResult', this.tagsForm)
+      this.tagsForm = parseUtils.splitTags(this.curItem.Tags)
+      parseUtils.setIntervalTime(this.curItem.NotifyInterval, this.time)
       console.log('curItem:', this.curItem)
       this.dialogFormVisible = true
       // after edit:this.$emit('indexSelect')
@@ -199,6 +226,9 @@ export default {
         buttonTip = '失败任务'
       }
       return buttonTip
+    },
+    isNotify (mode) {
+      return !(mode === 'interval' || mode === 'timing')
     }
   }
 }
