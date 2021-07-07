@@ -216,16 +216,18 @@ export default {
     // about edit
     edit (item) {
       // 仅仅copy给curItem，这样方便以后清空表格
-      if (item !== null) {
+      if (item !== null && item !== undefined) {
+        console.log('editMode:', 'oldEdit')
         Object.assign(this.curItem, item)
       } else {
+        console.log('editMode:', 'newEdit')
         for (let itemKey in item) {
           delete item[itemKey]
         }
         Object.assign(this.curItem, this.defaultItem)
       }
-      // console.log('splitResult', this.tagsForm)
       this.tagsForm = parseUtils.splitTags(this.curItem.Tags)
+      console.log('splitResult', this.tagsForm)
       parseUtils.setIntervalTime(this.curItem.NotifyInterval, this.time)
       console.log('curItem:', this.curItem)
       this.dialogFormVisible = true

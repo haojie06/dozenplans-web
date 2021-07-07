@@ -5,12 +5,12 @@
       <SideMenu @indexSelect="listByID" @emitCate="getCate" @emitTag="getTag" ref="sideMenu"></SideMenu>
     </el-aside>
     <el-main>
-      <div class="edit-button" align="center" style="position:fixed;right:200px;bottom:100px">
-        <el-button class="edit-button" type="info" icon="el-icon-edit" circle @click="newEdit"></el-button>
-      </div>
       <TaskList @refreshList="listByID" v-bind:list="list" :isLoading="isLoading"
                 :category-list="categoryList" :tag-list="tagList" @editFinish="refresh"
                 class="list-area" ref="listArea"></TaskList>
+      <div class="edit-button" align="center" style="position:fixed;right:200px;bottom:100px">
+        <el-button class="edit-button" type="info" icon="el-icon-edit" circle @click.native="newEdit"></el-button>
+      </div>
     </el-main>
   </el-container>
 </template>

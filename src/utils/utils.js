@@ -24,7 +24,7 @@ let parseUtils = {
     return endDate.replace(/\s+/g, 'T') + '+08:00'
   },
   splitTags (tags) {
-    return tags.trim().split(/\s+/)
+    return tags === '' ? [] : tags.trim().split(/\s+/)
   },
   mergeTags (tagList) {
     let tags = ''
