@@ -113,8 +113,7 @@ body {
   margin: 90px auto;
   width: 350px;
   padding: 35px 35px 15px 35px;
-  background:rgb(19, 18, 18);
-  opacity: 0.8;
+  background: #fff;
   border: 1px solid #eaeaea;
   box-shadow: 0 0 25px #cac6c6;
 }
