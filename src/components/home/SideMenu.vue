@@ -14,7 +14,7 @@
         <span>科目分类</span>
       </template>
       <el-menu-item v-for="(item,i) in categoryList" :key="i" :index=getIndexFromCategory(item.Id)>
-        {{ item.CategoryName}}
+        {{ item.CategoryName }}
       </el-menu-item>
     </el-submenu>
     <el-submenu index="3">
@@ -23,8 +23,16 @@
         <span>标签分类</span>
       </template>
       <el-menu-item v-for="(item,i) in tagList" :key="i" :index=getIndexFromTag(item.Id)>
-        {{ item.TagName}}
+        {{ item.TagName }}
       </el-menu-item>
+    </el-submenu>
+    <el-submenu index="4">
+      <template slot="title">
+        <i class="el-icon-document"></i>
+        <span>任务排序</span>
+      </template>
+      <el-menu-item index="deadline">截止时间排序</el-menu-item>
+      <el-menu-item index="priority">优先级排序</el-menu-item>
     </el-submenu>
   </el-menu>
 </template>
@@ -93,6 +101,8 @@ export default {
         this.listType = index.substr(0, 3)
       } else if (index === 1 || index === '1') {
         this.listType = 'all'
+      } else if (index === 'deadline' || 'priority') {
+        this.listType = index
       } else {
         return
       }

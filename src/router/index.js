@@ -4,6 +4,7 @@ import AppIndex from '../components/home/AppIndex'
 import Register from '../components/Register'
 import Login from '../components/Login'
 import Home from '../components/Home'
+import Charts from '../components/Charts'
 
 Vue.use(Router)
 
@@ -20,6 +21,14 @@ export default new Router({
           path: '/index',
           name: 'AppIndex',
           component: AppIndex,
+          meta: {
+            requireAuth: true
+          }
+        },
+        {
+          path: '/charts',
+          name: 'Charts',
+          component: Charts,
           meta: {
             requireAuth: true
           }

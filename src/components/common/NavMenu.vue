@@ -28,7 +28,7 @@ export default {
     return {
       navList: [
         {name: '/index', navItem: '任务列表'},
-        {name: '/chart', navItem: '统计报表'}
+        {name: '/charts', navItem: '统计报表'}
       ],
       username: this.$store.state.user.username
     }

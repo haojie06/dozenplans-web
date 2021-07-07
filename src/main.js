@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
+import * as echarts from 'echarts'
 import 'element-ui/lib/theme-chalk/index.css'
 import qs from 'qs'
 import store from './store'
@@ -14,6 +15,7 @@ axios.defaults.baseURL = 'http://localhost:8080/api'
 // 全局注册
 Vue.prototype.$axios = axios
 Vue.prototype.$qs = qs
+Vue.prototype.$echarts = echarts
 Vue.config.productionTip = false
 
 Vue.use(ElementUI)
@@ -21,7 +23,8 @@ Vue.use(ElementUI)
 router.beforeEach((to, from, next) => {
   if (to.meta.requireAuth === true) {
     if (store.state.user.username && store.state.token &&
-      store.state.user.username !== '' && store.state.token !== '') {
+      store.state.user.username !== '' && store.state.token !== '' &&
+      store.state.user.username !== undefined && store.state.token !== undefined) {
       next()
     } else {
       next({
@@ -39,6 +42,6 @@ new Vue({
   router,
   store,
   render: h => h(App),
-  components: { App },
+  components: {App},
   template: '<App/>'
 })

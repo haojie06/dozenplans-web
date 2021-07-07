@@ -48,6 +48,8 @@ export default {
         url = '/categories/' + id
       } else if (type === 'all') {
         url = '/tasks?id=' + this.$store.state.user.id
+      } else if (type === 'priority' || type === 'deadline') {
+        url = '/tasks?sort=' + type
       }
       let config = {
         method: 'get',
