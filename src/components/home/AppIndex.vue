@@ -8,8 +8,8 @@
       <TaskList @refreshList="listByID" v-bind:list="list" :isLoading="isLoading"
                 :category-list="categoryList" :tag-list="tagList" @editFinish="refresh"
                 class="list-area" ref="listArea"></TaskList>
-      <div class="edit-button" style="position:fixed;right:200px;bottom:100px;">
-        <el-button class="edit-button" type="info" icon="el-icon-edit" circle @click="newEdit"></el-button>
+      <div class="edit-button" align="center" style="position:fixed;right:200px;bottom:100px">
+        <el-button class="edit-button" type="info" icon="el-icon-edit" circle @click.native="newEdit"></el-button>
       </div>
     </el-main>
   </el-container>
@@ -70,7 +70,7 @@ export default {
       })
     },
     newEdit () {
-      // to create a dialog
+      this.$refs.listArea.edit()
     },
     refresh () {
       this.listByID()

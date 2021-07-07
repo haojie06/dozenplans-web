@@ -10,18 +10,41 @@ let parseUtils = {
     let userPart = decodeURIComponent(escape(window.atob(token.split('.')[1])))
     return JSON.parse(userPart)
   },
-  getCurRFC () {
-    let y = new Date().getFullYear()
-    let m = new Date().getMonth() + 1 < 10 ? '0' + (new Date().getMonth() + 1) : (new Date().getMonth() + 1)
-    let d = new Date().getDate() < 10 ? '0' + new Date().getDate() : new Date().getDate()
-    let hh = new Date().getHours() < 10 ? '0' + new Date().getHours() : new Date().getHours()
-    let mm = new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()
-    let ss = new Date().getSeconds() < 10 ? '0' + new Date().getSeconds() : new Date().getSeconds()
+  getRFCTime (date) {
+    if (date === null) {
+      date = new Date()
+    }
+    let y = date.getFullYear()
+    let m = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1)
+    let d = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+    let hh = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+    let mm = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+    let ss = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
     let endDate = y + '-' + m + '-' + d + ' ' + hh + ':' + mm + ':' + ss
     return endDate.replace(/\s+/g, 'T') + '+08:00'
   },
   splitTags (tags) {
-    return tags.trim().split(/\s+/)
+    return tags === '' ? [] : tags.trim().split(/\s+/)
+  },
+  mergeTags (tagList) {
+    let tags = ''
+    for (let tag of tagList) {
+      tags = tags + ' ' + tag
+    }
+    return tags.trim()
+  },
+  setIntervalTime (interval, time) {
+    let m = interval / 60
+    let h = m / 60
+    let min = m % 60
+    let hour = h % 24
+    let day = h / 24
+    time.min = min
+    time.hour = hour
+    time.day = day
+  },
+  getIntervalSecond (time) {
+    return ((time.day * 24 + time.hour) * 60 + time.min) * 60
   }
 }
 
