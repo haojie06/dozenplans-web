@@ -8,7 +8,7 @@
       <TaskList @refreshList="listByID" v-bind:list="list" :isLoading="isLoading"
                 :category-list="categoryList" :tag-list="tagList" @editFinish="refresh"
                 class="list-area" ref="listArea"></TaskList>
-      <div class="edit-button" align="center" style="position:fixed;right:200px;bottom:100px">
+      <div class="edit-button" align="center" style="position:fixed;right:100px;bottom:100px">
         <el-button class="edit-button" type="info" icon="el-icon-edit" circle @click.native="newEdit"></el-button>
       </div>
     </el-main>
