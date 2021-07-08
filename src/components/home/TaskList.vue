@@ -4,15 +4,15 @@
     <el-row>
       <el-col :span="4" v-for="(item, i) in list" :key=i :offset="1">
         <div style="margin-top:15px">
-          <el-card :body-style="{ padding: '0px', color: getColorByPri(item.Priority)}"
+          <el-card :body-style="{ padding: '0px'}"
                    shadow="hover" @click.native="edit(item)">
             <span>{{ item.Content }}</span>
             <div>
-              <strong>{{ item.TaskName }}</strong><br>
+              <strong style="display: block" :style="{color: getColorByPri(item.Priority)}">{{ item.TaskName }}</strong><br>
               <div class="other-info">
                 <time class="time"><span>结束时间:</span>{{ getTextTime(item.DeadlineAt) }}</time>
                 <el-popconfirm title="确定结束任务？" @confirm="finish(item)">
-                  <el-button slot="reference" type="text" class="button"
+                  <el-button slot="reference" type="text" class="button" @click.stop=""
                              :disabled="item.Status === 'done' || item.Status === 'failed'">
                     {{ getStatus(item) }}
                   </el-button>
@@ -132,9 +132,9 @@ export default {
         'Content': '',
         'Priority': 0,
         'DeadlineAt': '',
-        'Status': 'done',
+        'Status': 'undone',
         'IsCycle': false,
-        'NotifyMode': 'undone',
+        'NotifyMode': 'none',
         'NotifyTime': '2021-07-01T10:12:12-04:00',
         'NotifyInterval': 0,
         'Tags': '',
