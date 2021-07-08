@@ -4,11 +4,13 @@
     <el-row>
       <el-col :span="4" v-for="(item, i) in list" :key=i :offset="1">
         <div style="margin-top:15px">
-          <el-card :body-style="{ padding: '0px', color: getColorByPri(item.Priority)}"
-                   shadow="hover" @click.native="edit(item)">
-            <span>{{ item.Content }}</span>
+          <el-card :body-style="{ padding: '5px',borderwidth:'5px',backgroundColor:'white'} "
+                   shadow="always"  :style="{shadowColor:getColorByPri(item.Priority),backgroundColor:red}" @click.native="edit(item)">
+            <span style='display:block; overflow-y: stroll; overflow-x: auto; height: 120px;'>{{ item.Content }}</span>
+            <el-divider class="_main_divider"></el-divider>
             <div>
-              <strong>{{ item.TaskName }}</strong><br>
+              <strong style="display: block" :style="{color: getColorByPri(item.Priority)}">{{ item.TaskName }}</strong>
+              <el-divider class="_main_divider" ></el-divider>
               <div class="other-info">
                 <time class="time"><span>结束时间:</span>{{ getTextTime(item.DeadlineAt) }}</time>
                 <el-popconfirm title="确定结束任务？" @confirm="finish(item)">
@@ -303,6 +305,20 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
+body{
+ background: #d6fae8;
+
+}
+._main_divider{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: #54d169;
+
+}
+::-webkit-scrollbar {
+/*隐藏滚轮*/
+display: none;
+}
 
 </style>
