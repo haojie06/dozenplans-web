@@ -30,7 +30,7 @@
         <el-form-item label="任务名称" label-width="120px">
           <el-input v-model="curItem.TaskName" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="任务内容">
+        <el-form-item label="任务内容" label-width="120px">
           <el-input type="textarea" v-model="curItem.Content"></el-input>
         </el-form-item>
         <el-form-item label="任务分类" label-width="120px">
