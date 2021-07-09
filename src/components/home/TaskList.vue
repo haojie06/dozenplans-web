@@ -5,17 +5,17 @@
       <el-col :span="4" v-for="(item, i) in list" :key=i :offset="1">
         <div style="margin-top:15px">
           <el-card :body-style="{ padding: '5px',borderwidth:'5px',backgroundColor:'white'} "
-                   shadow="always"  :style="{shadowColor:getColorByPri(item.Priority),backgroundColor:red}" @click.native="edit(item)">
+                   shadow="always" :style="{shadowColor:getColorByPri(item.Priority)}" @click.native="edit(item)">
             <span style='display:block; overflow-y: scroll; overflow-x: auto; height: 120px;'>{{ item.Content }}</span>
             <el-divider class="_main_divider"></el-divider>
             <div>
               <strong style="display: block" :style="{color: getColorByPri(item.Priority)}">{{ item.TaskName }}</strong>
-              <el-divider class="_main_divider" ></el-divider>
+              <el-divider class="_main_divider"></el-divider>
               <div class="other-info">
                 <time class="time"><span>结束时间:</span>{{ getTextTime(item.DeadlineAt) }}</time>
                 <el-popconfirm title="确定结束任务？" @confirm="finish(item)">
                   <el-button slot="reference" type="text" class="button" @click.stop=""
-                             :disabled="item.Status === 'done' || item.Status === 'failed'">
+                             :disabled="item.Status === 'done' || item.Status === 'failed' || item.Status === 'success'">
                     {{ getStatus(item) }}
                   </el-button>
                 </el-popconfirm>
@@ -93,7 +93,7 @@
                              :precision="0" :step="1" :min="0" :max="24"></el-input-number>
             <span style="margin-left: 5px;margin-right: 10px">时</span>
             <el-input-number v-model="time.min" :disabled="curItem.NotifyMode !=='interval'"
-                             :precision="0" :step="1" :min="0" :max="60"></el-input-number>
+                             :precision="0" :step="1" :min="1" :max="60"></el-input-number>
             <span style="margin-left: 5px">分</span>
           </template>
         </el-form-item>
@@ -186,8 +186,8 @@ export default {
     },
     finish (item) {
       if (item.Status === 'undone') {
-        item.Status = 'done'
-        item.FinishedAt = parseUtils.getRFCTime()
+        item.Status = 'success'
+        item.FinishedAt = parseUtils.getRFCTime(new Date())
         let config = {
           method: 'put',
           url: '/tasks/' + item.Id,
@@ -200,6 +200,7 @@ export default {
         this.$axios(config).then(resp => {
           console.log('listInit', resp.data)
           if (resp && resp.data.result.Code === 200) {
+            console.log(resp.data)
             if (item.Status === resp.data.result.Data.Status) {
               _this.$emit('refreshList')
             } else {
@@ -234,8 +235,33 @@ export default {
       console.log('curItem:', this.curItem)
       this.dialogFormVisible = true
     },
+    checkItem () {
+      let item = this.curItem
+      let tip = ''
+      let deadLine = (typeof item.DeadlineAt) === 'string'
+        ? parseUtils.parseTime(item.DeadlineAt) : item.DeadlineAt
+      if (item.TaskName === '') {
+        tip = '任务名不可为空'
+      } else if (item.Content === '') {
+        tip = '任务内容不可为空'
+      } else if (deadLine <= new Date()) {
+        tip = '任务的截止时期不能早于现在'
+      }
+      if (tip !== '') {
+        this.$notify({
+          title: '提交形式错误',
+          message: tip,
+          type: 'warning'
+        })
+        return false
+      }
+      return true
+    },
     confirmEdit () {
       // transform tags and intervalTime
+      if (!this.checkItem()) {
+        return
+      }
       this.curItem.NotifyInterval = parseUtils.getIntervalSecond(this.time)
       this.curItem.Tags = parseUtils.mergeTags(this.tagsForm)
       console.log('timeType:', typeof this.curItem.DeadlineAt)
@@ -289,7 +315,7 @@ export default {
     },
     getStatus (item) {
       let buttonTip
-      if (item.Status === 'done') {
+      if (item.Status === 'done' || item.Status === 'success') {
         buttonTip = '已完成'
       } else if (item.Status === 'undone') {
         buttonTip = '结束'
@@ -306,19 +332,21 @@ export default {
 </script>
 
 <style>
-body{
- background: #d6fae8;
+body {
+  background: #d6fae8;
 
 }
-._main_divider{
+
+._main_divider {
   margin-top: 10px;
   margin-bottom: 10px;
   background-color: #54d169;
 
 }
+
 ::-webkit-scrollbar {
-/*隐藏滚轮*/
-display: none;
+  /*隐藏滚轮*/
+  display: none;
 }
 
 </style>

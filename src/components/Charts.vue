@@ -2,8 +2,8 @@
   <div style="margin-left:1%;margin-right:1%">
     <el-row style="margin-top: 20px">
       <el-col :span="6">
-        <el-card style="margin-left: 5%;margin-right: 5%" :shadow="always">
-          任务分布情况<br><br>饼状图<br><br>种类 与 标签
+        <el-card style="margin-left: 5%;margin-right: 5%" shadow="always">
+          任务分布情况<br><br>任务完成情况<br><br>任务热力日历图
         </el-card>
       </el-col>
       <el-col :span="8">
@@ -23,7 +23,7 @@
           <div style="width: 100%; height: 240px" ref="FinishRadar"></div>
         </el-card>
       </el-col>
-      <el-col :span="9">
+      <el-col :span="15">
         <el-card style="margin-left: 5%;margin-right: 5%">
           <div style="width: 100%; height: 240px" ref="TaskCalendar"></div>
         </el-card>
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import {parseUtils} from '../utils/utils'
+
 export default {
   name: 'Charts',
   data () {
@@ -126,9 +128,9 @@ export default {
         }
       }
       this.$axios(tagConfig).then(resp => {
-        console.log('tagConfig', resp)
         if (resp.status === 200 && resp.data.result.Code === 200) {
           this.progress = resp.data.result.Data
+          console.log('tagConfig', resp.data.result.Data)
           this.setCalendar()
         }
       }).catch(error => {
@@ -145,12 +147,12 @@ export default {
         },
         tooltip: {
           trigger: 'item',
-          formatter: '{a},{b},{c},{d}',
+          formatter: '任务完成情况<br>{c}',
           confine: true
         },
         visualMap: {
-          min: 0,
-          max: 10,
+          min: 1,
+          max: 11,
           type: 'piecewise',
           orient: 'horizontal',
           left: 'center',
@@ -173,6 +175,7 @@ export default {
           data: this.getVirtulData()
         }
       }
+      this.taskCalendar.setOption(option)
     },
     setDate () {
       let date = new Date()
@@ -191,14 +194,37 @@ export default {
       console.log('formerDate:', this.formerDate)
     },
     getVirtulData () {
-      // todo
+      let data = []
+      let start = this.$echarts.number.parseDate(this.formerDate).getTime()
+      let end = this.$echarts.number.parseDate(this.curDate).getTime()
+      console.log('start:', this.formerDate)
+      console.log('end', this.curDate)
+      let dayTime = 3600 * 24 * 1000
+      let offset = 3600 * 12 * 1000
+      let count
+      let _this = this
+      for (let time = start; time <= end; time += dayTime) {
+        count = 0
+        for (let date of _this.progress) {
+          let cur = (new Date(parseUtils.parseTime(date.Date))).getTime() - offset
+          // console.log('rfc:', cur)
+          // console.log('time:', time)
+          if (cur === time) {
+            count = date.SuccesCount
+          }
+        }
+        data.push([_this.$echarts.format.formatTime('yyyy-MM-dd', time), count])
+      }
+      console.log('progressData:', data)
+      return data
     },
     setRadarChart () {
       let priorityMax = [0, 0, 0, 0, 0]
       let priorityFinished = [0, 0, 0, 0, 0]
       for (let taskListElement of this.taskList) {
         priorityMax[taskListElement.Priority] = priorityMax[taskListElement.Priority] + 1
-        if (taskListElement.Status === 'done' || taskListElement.CompleteCount > 0) {
+        if (taskListElement.Status === 'done' ||
+          taskListElement.CompleteCount > 0 || taskListElement.Status === 'success') {
           priorityFinished[taskListElement.Priority] = priorityFinished[taskListElement.Priority] + 1
           priorityFinished[4] = priorityFinished[4] + 1
         }
