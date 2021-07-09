@@ -156,7 +156,10 @@ export default {
           type: 'piecewise',
           orient: 'horizontal',
           left: 'center',
-          top: 65
+          top: 65,
+          inRange: {
+            color: ['#c5e1a5', '#33691e']
+          }
         },
         calendar: {
           top: 120,
@@ -167,7 +170,15 @@ export default {
           itemStyle: {
             borderWidth: 0.5
           },
-          yearLabel: {show: false}
+          yearLabel: {show: false},
+          dayLabel: {
+            show: true,
+            nameMap: 'cn'
+          },
+          monthLabel: {
+            show: true,
+            nameMap: 'cn'
+          }
         },
         series: {
           type: 'heatmap',
