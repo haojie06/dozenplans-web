@@ -103,9 +103,7 @@ export default {
 
 <style>
 body {
-  background: url(../assets/LoginBackgroundImg1.png);
-  background-repeat: no-repeat;
-  background-size: 100% auto;
+  background: #d6fae8;
 }
 .login_container {
   border-radius: 15px;
